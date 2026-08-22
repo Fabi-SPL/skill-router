@@ -43,7 +43,7 @@ Directly merging skill bodies by concatenation was identified as a 'context bomb
 **Swift/iOS Skills Project-Scoped, Global Catalog Reduced**  
 `decision`
 
-Decided to project-scope Swift/iOS skills. A `swift-ios` router was built for `Brain Food Signal` and `lucid-ride` projects, with original files moved to `C:/Programs/Claude/_vendor-skills/`. This removed ~52KB and 84 entries from the global skill catalog, making them available only when relevant.
+Decided to project-scope Swift/iOS skills. A `swift-ios` router was built for the two projects that actually use Swift, with the original files moved to a local vendor directory outside any skills root. This removed ~52KB and 84 entries from the global skill catalog, making them available only when relevant.
 
 **51 Skill Folders are Symlinks to External Repos**  
 `finding`
