@@ -3,6 +3,10 @@
 The raw record, in order, from my session logs. Wrong turns included, because the
 wrong turns are where the method came from.
 
+`HQ2` below is a second Claude-Code-compatible client running against the same
+`~/.claude/skills/` folder. It is in here because the catalog cost is a property
+of the folder, not of one client, so both saw the same win.
+
 
 ## 2026-08-21
 
@@ -44,7 +48,7 @@ Decided to project-scope Swift/iOS skills. A `swift-ios` router was built for `B
 **51 Skill Folders are Symlinks to External Repos**  
 `finding`
 
-Discovered that 51 of the 95 skill folders are symlinks, pointing to `~/.agents/skills` (45) and `C:/Programs/Claude/lucid-od-skills` (6). This means skill folders cannot be copied into `refs/` for router skills, requiring pointer files instead to avoid forking external repos.
+Discovered that 51 of the 95 skill folders are symlinks, pointing to `~/.agents/skills` (45) and a second local skills repo (6). This means skill folders cannot be copied into `refs/` for router skills, requiring pointer files instead to avoid forking external repos.
 
 **Skill Catalog Restructured to 10 Entries (7 Routers)**  
 `file_change`
