@@ -18,6 +18,15 @@ Reproduce both numbers with [`measure.sh`](measure.sh):
 ./measure.sh ~/.claude/skills        # the live catalog
 ```
 
+Routing accuracy held. Same 23 prompts, same model, two catalog sizes:
+
+```
+103-entry catalog   40/40   100%
+12-entry catalog    50/51    98%
+```
+
+The single miss invoked no skill rather than the wrong one. Reproduce with [`rescore.mjs`](rescore.mjs), and read [`BENCHMARK.md`](BENCHMARK.md) for what that number does not cover, which matters as much as the number.
+
 ## The thing that makes it work
 
 The obvious move is to merge related skills into one file. That is a trap. The 89 skill bodies total **1,192,261 bytes**, roughly 330,000 tokens. Concatenating them produces a file too large to ever load.
@@ -43,33 +52,36 @@ Nothing is deleted. `skills-lib/` holds all 89, symlinks included. The router bo
 
 ## What the frontmatter has to do
 
-A router's `description` is doing more work than a normal skill's, because it has to fire for every trigger in its category. In practice that means the description is mostly a trigger vocabulary, and it is the only part you can afford to spend bytes on.
+A router's `description` is doing more work than a normal skill's, because it has to fire for every trigger in its category. In practice that means the description is mostly a trigger vocabulary, and it is the only part worth spending bytes on.
 
 The mean entry grew from 691 to 927 bytes for exactly this reason. Fewer, denser entries beat many thin ones.
 
 ## What is measured and what is not
 
-Measured, and reproducible from the script above:
+Measured and reproducible from the scripts in this repo:
 
-- catalog entry count, before and after
-- catalog bytes injected per turn, before and after
+- catalog entry count and catalog bytes injected per turn, before and after
 - total body bytes, which is the number that kills naive merging
+- routing accuracy across both catalog sizes, scored from the surviving session transcripts
 
-Reported in my own session logs, not independently reproducible here:
+Reported from my own session logs, not independently reproducible here:
 
 - total delivered tokens per turn fell from roughly 48,200 to 12,150, a 75% cut, after both the catalog restructure and a separate `CLAUDE.md` cleanup. Two changes, one number. The catalog-only figure is the 86% above.
 
-**Not measured. This is the honest gap:**
+The honest limits on the accuracy number:
 
-- **Routing accuracy is unproven.** Whether the model reliably picks the right skill through a router, as often as it did with a flat catalog, has not been benchmarked successfully. The one attempt cost $255.56 across 91 sessions and produced uninterpretable output for two compounding reasons, both mine, both documented in [`BENCHMARK.md`](BENCHMARK.md).
+- the baseline arm carries the routers alongside the 91 old entries, so it is a 103-entry catalog against a 12-entry one, not a flat catalog against a routed one
+- the expected answer is a router name in both arms, so this measures finding the right category, not reading down to the right file underneath
+- 23 tasks across 7 routers is thin per-router coverage, and 100% against 98% at this size rules out a large regression, not a small one
 
-Until that number exists, the claim this repo can make is about token cost, not about behaviour being unchanged.
+All three are expanded in [`BENCHMARK.md`](BENCHMARK.md), along with the two mistakes that made the run cost $255.56 instead of single-digit dollars.
 
 ## Files
 
 | | |
 |---|---|
-| [`measure.sh`](measure.sh) | the measurement, run it against any skills root |
+| [`measure.sh`](measure.sh) | the catalog measurement, run it against any skills root |
+| [`rescore.mjs`](rescore.mjs) | scores routing accuracy from the saved session transcripts |
 | [`METHOD.md`](METHOD.md) | how to convert a flat catalog, step by step |
-| [`BENCHMARK.md`](BENCHMARK.md) | the failed accuracy benchmark, what went wrong, what the corrected design is |
+| [`BENCHMARK.md`](BENCHMARK.md) | the accuracy result, its limits, and what the run cost |
 | [`NOTES.md`](NOTES.md) | the raw record: every finding, in order, including the wrong turns |

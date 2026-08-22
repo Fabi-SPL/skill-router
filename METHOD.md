@@ -69,4 +69,4 @@ If a skill only applies inside one repo, scope it there. That beats routing.
 ./measure.sh ~/.claude/skills
 ```
 
-Then benchmark accuracy, which is the step I have not completed. See [`BENCHMARK.md`](BENCHMARK.md).
+Then benchmark accuracy. `rescore.mjs` scores it from saved session transcripts, and [`BENCHMARK.md`](BENCHMARK.md) has the result plus what it does not cover.

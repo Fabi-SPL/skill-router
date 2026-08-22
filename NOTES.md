@@ -71,6 +71,8 @@ After skill restructuring and CLAUDE.md cleanup, the total delivered tokens per 
 
 The routing accuracy of the newly implemented router skills remains unproven. Initial benchmark attempts failed due to a bug in the scoring script (wrong case/field for skill invocation), yielding uninterpretable results. Further testing is required to confirm if the model correctly invokes skills via the new router structure.
 
+> Resolved after this atom was written. The scorer bug corrupted the scoring, not the collection, so the sessions were re-scored from disk: 40/40 on the 103-entry catalog, 50/51 on the 12-entry one. See [`BENCHMARK.md`](BENCHMARK.md).
+
 **Router Structure Confirmed Working via Direct Probe**  
 `finding`
 
