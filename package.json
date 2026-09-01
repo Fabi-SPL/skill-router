@@ -1,0 +1,13 @@
+{
+  "name": "@fabi-spl/skill-router",
+  "version": "1.0.0",
+  "description": "Measure what a Claude Code skill catalog costs per turn, and route it down without deleting anything.",
+  "bin": { "skill-router": "bin/skill-router.mjs" },
+  "type": "module",
+  "engines": { "node": ">=18" },
+  "files": ["bin", "src", "METHOD.md", "BENCHMARK.md", "NOTICE"],
+  "license": "Apache-2.0",
+  "author": "Fabian Ilg (https://github.com/Fabi-SPL)",
+  "repository": { "type": "git", "url": "git+https://github.com/Fabi-SPL/skill-router.git" },
+  "keywords": ["claude", "claude-code", "skills", "context", "tokens", "agent"]
+}

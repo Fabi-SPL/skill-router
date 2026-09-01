@@ -27,6 +27,34 @@ Routing accuracy held. Same 23 prompts, same model, two catalog sizes:
 
 The single miss invoked no skill rather than the wrong one. Reproduce with [`rescore.mjs`](rescore.mjs), and read [`BENCHMARK.md`](BENCHMARK.md) for what that number does not cover, which matters as much as the number.
 
+## Use it on your own catalog
+
+```bash
+npx github:Fabi-SPL/skill-router measure          # what yours costs right now
+npx github:Fabi-SPL/skill-router plan             # propose routers, price the result
+npx github:Fabi-SPL/skill-router apply router-plan.json --yes
+```
+
+Node 18+, no dependencies. Default root is `~/.claude/skills`; pass another as
+the first argument.
+
+`plan` clusters the catalog by shared trigger vocabulary and writes an editable
+`router-plan.json` with the projected numbers. `apply` creates the routers and
+moves every original into a sibling `skills-lib/`, which is not a skills root,
+so it reaches no catalog and stays readable by path. Nothing is deleted, and
+`revert` puts it all back:
+
+```bash
+npx github:Fabi-SPL/skill-router revert
+```
+
+**The clustering is mechanical; the grouping is not.** On the 89-skill catalog
+above the automatic pass reaches 35 entries and 19,114 bytes, a 69% cut. The
+hand-grouped version in this README reaches 9 entries and 8,351 bytes, 86%.
+That gap is judgement about which triggers can share one description without
+becoming ambiguous, and the plan file is where you apply it. Editing the drafted
+descriptions before `apply` is the whole job.
+
 ## The thing that makes it work
 
 The obvious move is to merge related skills into one file. That is a trap. The 89 skill bodies total **1,192,261 bytes**, roughly 330,000 tokens. Concatenating them produces a file too large to ever load.
@@ -80,8 +108,15 @@ All three are expanded in [`BENCHMARK.md`](BENCHMARK.md), along with the two mis
 
 | | |
 |---|---|
-| [`measure.sh`](measure.sh) | the catalog measurement, run it against any skills root |
+| [`bin/skill-router.mjs`](bin/skill-router.mjs) | the CLI: measure, plan, apply, revert |
+| [`src/`](src) | catalog parsing, the clustering, and the reversible file surgery |
+| [`measure.sh`](measure.sh) | the original measurement in bash, kept because the numbers above came from it |
 | [`rescore.mjs`](rescore.mjs) | scores routing accuracy from the saved session transcripts |
 | [`METHOD.md`](METHOD.md) | how to convert a flat catalog, step by step |
 | [`BENCHMARK.md`](BENCHMARK.md) | the accuracy result, its limits, and what the run cost |
 | [`NOTES.md`](NOTES.md) | the raw record: every finding, in order, including the wrong turns |
+
+## License
+
+Apache 2.0. Use it, fork it, ship it inside something commercial. Keep the
+copyright line and the [`NOTICE`](NOTICE), and say where it came from.
