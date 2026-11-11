@@ -20,7 +20,13 @@ In my case `opencode` was scanning `~/.agents/skills/**` as a second root, which
 }
 ```
 
-plus `OPENCODE_DISABLE_EXTERNAL_SKILLS=1`.
+I also set `OPENCODE_DISABLE_EXTERNAL_SKILLS=1`, and that was the weak part. An environment variable holds only as long as every process in the chain passes it on. In November a launcher relaunched its child with a cleaned environment and the variable was gone. The listing went from 32 entries to 126 and stayed there for more than a day. Nothing failed and nothing logged an error. Every request carried 95,000 characters of skill descriptions.
+
+Three changes came out of that:
+
+- Keep the switch where a relaunch cannot lose it. If you own the harness, make the short catalog the default in code. If you do not, put it in the config file. The way back is a line in the config too, never a variable.
+- Hold the catalog to an accepted list of names and check it every night. Mine files on any skill that arrived, any router that dropped out, descriptions that grew more than 500 characters past what was accepted, and a ceiling of 18 entries and 16,000 characters. A count budget with headroom lets skills in one at a time.
+- Check how deep the harness walks each root. Mine walked recursively and listed 19 skills a desktop app had synced into a subfolder, so the listing was already at 32 before the switch was lost. One level deep is enough for a catalog of routers.
 
 Check for symlinks before you plan any file moves. 51 of my 95 skill folders were symlinks into `~/.agents/skills` and `lucid-od-skills`, which are repos I do not own. Those cannot be copied into a router's `refs/` without forking someone else's work, so routers point at them rather than absorbing them.
 

@@ -11,6 +11,8 @@ after                    9            8,351            2,319
                        -90%             -86%             -86%
 ```
 
+Update, November 2026: the catalog has grown to 13 entries and 11,373 bytes as new areas were added. [`METHOD.md`](METHOD.md) covers what broke in between and the nightly check that guards it now.
+
 Reproduce both numbers with [`measure.sh`](measure.sh):
 
 ```bash
