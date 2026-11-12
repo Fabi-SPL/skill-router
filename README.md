@@ -1,6 +1,6 @@
 # skill-router
 
-Claude Code injects the YAML frontmatter of every skill it can see into the system prompt, on every turn, whether or not the turn has anything to do with that skill. With 89 skills installed that is 61,533 bytes of catalog before the conversation starts.
+When I measured this in August 2026, Claude Code injected the YAML frontmatter of every skill it could see into the system prompt, on every turn, whether or not the turn had anything to do with that skill. With 89 skills installed that was 61,533 bytes of catalog before the conversation started.
 
 This is the pattern I used to get it to 8,351 bytes without deleting a single skill.
 
