@@ -20,14 +20,19 @@ Reproduce both numbers with [`measure.sh`](measure.sh):
 ./measure.sh ~/.claude/skills        # the live catalog
 ```
 
-Routing accuracy held. Same 23 prompts, same model, two catalog sizes:
+Where this matters has moved since August. Claude Code's documentation now describes a cap on the listing itself (`skillListingBudgetFraction`, 1% of the context window by default, with the descriptions of the least used skills dropped first). On stock Claude Code the bytes are bounded either way, and a router mostly decides which descriptions survive. A harness that lists every skill in full, such as opencode or a custom agent loop on the API, still pays the whole catalog on every turn. Mine is one of those, and the numbers on this page come from it.
+
+Routing accuracy: the August run said it held. The corrected November run says it costs a little. One task per skill, three catalogs, same model, scored down to the file:
 
 ```
-103-entry catalog   40/40   100%
-12-entry catalog    50/51    98%
+flat catalog      98 entries   75,842 chars   80/89   89.9%
+mixed catalog    123 entries   93,167 chars   77/89   86.5%
+routed catalog    16 entries   14,151 chars   74/89   83.1%
 ```
 
-The single miss invoked no skill rather than the wrong one. Reproduce with [`rescore.mjs`](rescore.mjs), and read [`BENCHMARK.md`](BENCHMARK.md) for what that number does not cover, which matters as much as the number.
+That is 6.7 points under the flat catalog at a fifth of the size. The bar was written before the run: within 5 points holds, more than 10 under is a regression. So this result is inconclusive, and I report it as that. Once the model names the right router it finds the right file 74 times out of 76. Eleven of the fifteen misses picked one of two skills whose descriptions tell the model to load them before anything else. A router's broad description loses to that where a specific one did not.
+
+[`BENCHMARK.md`](BENCHMARK.md) has the bar, the misses and the limits. The August numbers (40/40 against 50/51) are kept there too, with the reasons they could not see this.
 
 ## Use it on your own catalog
 
@@ -92,19 +97,21 @@ Measured and reproducible from the scripts in this repo:
 
 - catalog entry count and catalog bytes injected per turn, before and after
 - total body bytes, which is the number that kills naive merging
-- routing accuracy across both catalog sizes, scored from the surviving session transcripts
+- the August routing numbers, scored from the surviving session transcripts with [`rescore.mjs`](rescore.mjs)
 
-Reported from my own session logs, not independently reproducible here:
+Reported from my own setup, not independently reproducible here:
 
+- the November routing run. Its tasks are written from my own skill files and its calls ran through my own harness. The bar and the scoring rules are in [`BENCHMARK.md`](BENCHMARK.md) in full.
 - total delivered tokens per turn fell from roughly 48,200 to 12,150, a 75% cut, after both the catalog restructure and a separate `CLAUDE.md` cleanup. Two changes, one number. The catalog-only figure is the 86% above.
 
-The honest limits on the accuracy number:
+The honest limits on the November accuracy number:
 
-- the baseline arm carries the routers alongside the 91 old entries, so it is a 103-entry catalog against a 12-entry one, not a flat catalog against a routed one
-- the expected answer is a router name in both arms, so this measures finding the right category, not reading down to the right file underneath
-- 23 tasks across 7 routers is thin per-router coverage, and 100% against 98% at this size rules out a large regression, not a small one
+- one run, one model, one catalog. 89 tasks resolve a gap of about 10 points, not 3
+- the model was asked to name one skill. In real use it can load two, and the two skills that took most of the misses are written to be loaded beside another one
+- each task message was written from the skill's own body, which favours the flat catalog
+- the catalog was the whole system prompt. A real one sits inside a prompt many times larger
 
-All three are expanded in [`BENCHMARK.md`](BENCHMARK.md), along with the two mistakes that made the run cost $255.56 instead of single-digit dollars.
+All four are expanded in [`BENCHMARK.md`](BENCHMARK.md), along with the two mistakes that made the August run cost $255.56 instead of single-digit dollars.
 
 ## Files
 
