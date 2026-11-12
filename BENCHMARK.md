@@ -94,7 +94,7 @@ Reproduce it from the surviving transcripts:
 node rescore.mjs
 ```
 
-## What this does and does not show
+### What the August run does and does not show
 
 It shows that collapsing the catalog by an order of magnitude did not cost routing accuracy at this sample size. 40/40 against 50/51 is not a detectable regression.
 
@@ -112,7 +112,7 @@ The fallback path, probed directly rather than through the harness:
 
 > Asked the model to load `seo-audit`, a skill that no longer exists as a catalog entry. The harness returned `Unknown skill`. The model located the file under the `growth-seo` router, read it, and answered correctly.
 
-## What it cost, and why that was avoidable
+### What August cost, and why that was avoidable
 
 ```
 sessions                         91
@@ -140,7 +140,7 @@ Capital `S`, and the argument is `skill`, not `name`. Every arm reported zero in
 
 What saved it is that the bug was in the **scoring**, not the **collection**. The sessions were written to `opencode-local.db` in full, with the real tool calls in them, and the expected answer preserved in each session title. Re-scoring cost nothing. That is the only reason there is a number in this file at all, and it is luck rather than design.
 
-## What a corrected run looks like
+### What a corrected run looks like, as written in August
 
 1. **Name, do not perform.** One-line request, model responds with the skill it would load, no tools, short max tokens.
 2. **Assert the instrument first.** Require a non-zero invocation count on a known-good trace before the suite proceeds.
