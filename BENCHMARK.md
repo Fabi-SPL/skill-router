@@ -53,6 +53,8 @@ Flat missed 9, and 5 of them were design skills collapsing into one neighbour. T
 
 **One run, one model, one catalog.** The catalog is mine. 89 tasks resolve a gap of about 10 points, not 3.
 
+**Hand-grouped routers, not the CLI's plan.** The 7 routers in this run are grouped by hand, and every row carries the full path to its file. `skill-router plan` proposes its own groups, 12 on the same library, and writes paths relative to the library. That output was not benchmarked.
+
 **A single pick.** The model was asked to name one skill. In use it can load two, and the two skills that took most of the misses are written to be loaded beside another one. This run cannot tell a model that would load both from one that stops at the first.
 
 **The messages favour flat.** Each was written by the model from the skill's own body, with the frontmatter cut off. It shares more words with that skill's own description than with a router's.
